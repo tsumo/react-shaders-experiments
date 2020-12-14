@@ -17,6 +17,7 @@ export class ShaderService {
   private canvas: HTMLCanvasElement;
   private options: ShaderServiceOptions;
 
+  private startTime = Date.now();
   private paused = false;
   private rafId = 0;
 
@@ -71,15 +72,23 @@ export class ShaderService {
     gl.linkProgram(program);
     gl.useProgram(program);
 
+    const timeLocation = gl.getUniformLocation(program, 'time');
+    const positionLocation = gl.getAttribLocation(program, 'a_position');
+
+    gl.uniform1f(timeLocation, 0);
+
     const render = () => {
       if (this.paused) {
         this.rafId = window.requestAnimationFrame(render);
         return;
       }
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
+
+      gl.uniform1f(timeLocation, (Date.now() - this.startTime) / 700);
+
       gl.enableVertexAttribArray(positionLocation);
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+
       this.rafId = window.requestAnimationFrame(render);
     };
 
