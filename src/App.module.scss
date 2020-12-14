@@ -1,4 +1,13 @@
+$canvas-size: min(30vw, 30vh);
+
 .root {
-  background-color: teal;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvas {
+  width: $canvas-size;
+  height: $canvas-size;
 }
