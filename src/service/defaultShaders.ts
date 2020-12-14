@@ -11,9 +11,11 @@ void main() {
 export const defaultFragmentShader = `
 precision highp float;
 
-uniform float time;
+uniform float u_time;
+uniform vec2 u_resolution;
 
 void main() {
-	gl_FragColor = vec4(abs(sin(time)), abs(cos(time * 1.3)), abs(tan(time * 1.5)), 1.0);
+  vec2 st = gl_FragCoord.xy/u_resolution;
+	gl_FragColor = vec4(st.x, st.y, abs(sin(u_time)), 1.0);
 }
 `;

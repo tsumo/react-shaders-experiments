@@ -72,10 +72,15 @@ export class ShaderService {
     gl.linkProgram(program);
     gl.useProgram(program);
 
-    const timeLocation = gl.getUniformLocation(program, 'time');
-    const positionLocation = gl.getAttribLocation(program, 'a_position');
+    const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+    gl.uniform2f(resolutionLocation, this.canvas.width, this.canvas.height);
 
+    const timeLocation = gl.getUniformLocation(program, 'u_time');
     gl.uniform1f(timeLocation, 0);
+
+    const positionLocation = gl.getAttribLocation(program, 'a_position');
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
     const render = () => {
       if (this.paused) {
@@ -84,9 +89,8 @@ export class ShaderService {
       }
 
       gl.uniform1f(timeLocation, (Date.now() - this.startTime) / 700);
+      gl.uniform2f(resolutionLocation, this.canvas.width, this.canvas.height);
 
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
       this.rafId = window.requestAnimationFrame(render);
