@@ -22,6 +22,7 @@ export class ShaderService {
   private rafId = 0;
 
   private boundResizeListener: () => void;
+  private resizeObserver: ResizeObserver;
 
   constructor(canvas: HTMLCanvasElement, options: ShaderServiceOptions) {
     this.canvas = canvas;
@@ -30,6 +31,8 @@ export class ShaderService {
     this.resize();
     this.boundResizeListener = this.resize.bind(this);
     window.addEventListener('resize', this.boundResizeListener);
+    this.resizeObserver = new ResizeObserver(this.resize.bind(this));
+    this.resizeObserver.observe(this.canvas);
 
     const gl = canvas.getContext('webgl');
     if (!gl) {
@@ -78,10 +81,6 @@ export class ShaderService {
     const timeLocation = gl.getUniformLocation(program, 'u_time');
     gl.uniform1f(timeLocation, 0);
 
-    const positionLocation = gl.getAttribLocation(program, 'a_position');
-    gl.enableVertexAttribArray(positionLocation);
-    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
     const render = () => {
       if (this.paused) {
         this.rafId = window.requestAnimationFrame(render);
@@ -91,6 +90,9 @@ export class ShaderService {
       gl.uniform1f(timeLocation, (Date.now() - this.startTime) / 700);
       gl.uniform2f(resolutionLocation, this.canvas.width, this.canvas.height);
 
+      const positionLocation = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
       this.rafId = window.requestAnimationFrame(render);
@@ -112,6 +114,7 @@ export class ShaderService {
   destroy() {
     window.cancelAnimationFrame(this.rafId);
     window.removeEventListener('resize', this.boundResizeListener);
+    this.resizeObserver.disconnect();
   }
 }
 
