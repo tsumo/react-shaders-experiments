@@ -1,5 +1,39 @@
+$control-color: burlywood;
+
 .root {
-  border: 3px solid rgba(black, 0.2);
   width: 300px;
   height: 300px;
+  position: relative;
+  box-sizing: content-box;
+  border: 3px solid transparent;
+  overflow: hidden;
+
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: $control-color;
+
+    .corner {
+      opacity: 1;
+    }
+  }
+}
+
+.corner {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  bottom: 0;
+  width: 34px;
+  height: 34px;
+  background: repeating-linear-gradient(
+    transparent 0,
+    transparent 3px,
+    $control-color 3px,
+    $control-color 6px
+  );
+  cursor: nw-resize;
+  transform: rotate(-45deg) translate(0px, 20px);
+
+  transition: opacity 0.3s;
 }
