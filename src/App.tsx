@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useShaderService } from 'service/ShaderService';
+import { ResizeContainer } from 'components/ResizeContainer/ResizeContainer';
 import s from 'App.module.scss';
 
 const App = () => {
@@ -8,7 +9,9 @@ const App = () => {
 
   return (
     <div className={s.root}>
-      <canvas ref={canvasRef} className={s.canvas} />
+      <ResizeContainer>
+        <canvas ref={canvasRef} className={s.canvas} />
+      </ResizeContainer>
     </div>
   );
 };

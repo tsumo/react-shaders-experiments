@@ -1,5 +1,3 @@
-$canvas-size: min(30vw, 30vh);
-
 .root {
   height: 100vh;
   display: flex;
@@ -8,6 +6,6 @@ $canvas-size: min(30vw, 30vh);
 }
 
 .canvas {
-  width: $canvas-size;
-  height: $canvas-size;
+  width: 100%;
+  height: 100%;
 }
