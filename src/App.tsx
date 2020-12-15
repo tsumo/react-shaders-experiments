@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useShaderService } from 'service/ShaderService';
 import s from 'App.module.scss';
 
