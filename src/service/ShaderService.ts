@@ -17,6 +17,9 @@ export class ShaderService {
   private canvas: HTMLCanvasElement;
   private options: ShaderServiceOptions;
 
+  private gl: WebGLRenderingContext;
+  private program: WebGLProgram;
+
   private startTime = Date.now();
   private paused = false;
   private rafId = 0;
@@ -36,9 +39,9 @@ export class ShaderService {
 
     const gl = canvas.getContext('webgl');
     if (!gl) {
-      this.reportError('cannot get wegbl context');
-      return;
+      throw new Error('cannot get wegbl context');
     }
+    this.gl = gl;
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     const buffer = gl.createBuffer();
@@ -51,25 +54,24 @@ export class ShaderService {
 
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
     if (!vertexShader) {
-      this.reportError('cannot create vertex shader');
-      return;
+      throw new Error('cannot create vertex shader');
     }
     gl.shaderSource(vertexShader, options.vertexShaderSource);
     gl.compileShader(vertexShader);
 
     const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
     if (!fragmentShader) {
-      this.reportError('cannot create fragment shader');
-      return;
+      throw new Error('cannot create fragment shader');
     }
     gl.shaderSource(fragmentShader, options.fragmentShaderSource);
     gl.compileShader(fragmentShader);
 
     const program = gl.createProgram();
     if (!program) {
-      this.reportError('cannot create gl program');
-      return;
+      throw new Error('cannot create gl program');
     }
+    this.program = program;
+
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
@@ -105,10 +107,6 @@ export class ShaderService {
     const size = this.canvas.getBoundingClientRect();
     this.canvas.width = size.width * this.options.sizeRatio;
     this.canvas.height = size.height * this.options.sizeRatio;
-  }
-
-  private reportError(message: string) {
-    console.error(`ShaderSource: ${message}`);
   }
 
   destroy() {
