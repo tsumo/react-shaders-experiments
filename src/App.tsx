@@ -1,16 +1,12 @@
-import { useRef } from 'react';
-import { useShaderService } from 'service/useShaderService';
 import { ResizeContainer } from 'components/ResizeContainer/ResizeContainer';
+import { Shader } from 'components/Shader/Shader';
 import s from 'App.module.scss';
 
 export const App = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useShaderService(canvasRef);
-
   return (
     <div className={s.root}>
       <ResizeContainer>
-        <canvas ref={canvasRef} className={s.canvas} />
+        <Shader />
       </ResizeContainer>
     </div>
   );
