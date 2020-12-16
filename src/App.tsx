@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useShaderService } from 'service/ShaderService';
+import { useShaderService } from 'service/useShaderService';
 import { ResizeContainer } from 'components/ResizeContainer/ResizeContainer';
 import s from 'App.module.scss';
 
