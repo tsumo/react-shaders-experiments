@@ -5,7 +5,7 @@ import s from 'App.module.scss';
 
 const App = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shaderService = useShaderService(canvasRef);
+  useShaderService(canvasRef);
 
   return (
     <div className={s.root}>
