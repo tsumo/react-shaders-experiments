@@ -18,11 +18,14 @@ export class ShaderService {
   private gl: WebGLRenderingContext;
   private program: WebGLProgram;
 
+  private resolutionLocation: WebGLUniformLocation;
+  private timeLocation: WebGLUniformLocation;
+
   private startTime = Date.now();
   private paused = false;
   private rafId = 0;
 
-  private boundResizeListener: () => void;
+  private boundResizeHotListener: () => void;
   private resizeObserver: ResizeObserver;
 
   constructor(canvas: HTMLCanvasElement, options: ShaderServiceOptions) {
@@ -30,9 +33,9 @@ export class ShaderService {
     this.options = options;
 
     this.resize();
-    this.boundResizeListener = this.resize.bind(this);
-    window.addEventListener('resize', this.boundResizeListener);
-    this.resizeObserver = new ResizeObserver(this.resize.bind(this));
+    this.boundResizeHotListener = this.resizeHot.bind(this);
+    window.addEventListener('resize', this.boundResizeHotListener);
+    this.resizeObserver = new ResizeObserver(this.boundResizeHotListener);
     this.resizeObserver.observe(this.canvas);
 
     const gl = canvas.getContext('webgl');
@@ -76,9 +79,17 @@ export class ShaderService {
     gl.useProgram(program);
 
     const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+    if (!resolutionLocation) {
+      throw new Error('cannot get resolution location');
+    }
+    this.resolutionLocation = resolutionLocation;
     gl.uniform2f(resolutionLocation, this.canvas.width, this.canvas.height);
 
     const timeLocation = gl.getUniformLocation(program, 'u_time');
+    if (!timeLocation) {
+      throw new Error('cannot get time location');
+    }
+    this.timeLocation = timeLocation;
     gl.uniform1f(timeLocation, 0);
 
     const render = () => {
@@ -102,14 +113,18 @@ export class ShaderService {
   }
 
   private resize() {
-    const size = this.canvas.getBoundingClientRect();
-    this.canvas.width = size.width;
-    this.canvas.height = size.height;
+    this.canvas.width = this.canvas.clientWidth;
+    this.canvas.height = this.canvas.clientHeight;
+  }
+
+  private resizeHot() {
+    this.resize();
+    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
   }
 
   destroy() {
     window.cancelAnimationFrame(this.rafId);
-    window.removeEventListener('resize', this.boundResizeListener);
+    window.removeEventListener('resize', this.boundResizeHotListener);
     this.resizeObserver.disconnect();
   }
 }
