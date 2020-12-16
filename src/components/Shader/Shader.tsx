@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useShaderService } from 'service/useShaderService';
+import { useShaderService } from 'services/useShaderService';
 
 export const Shader = () => {
   const ref = useRef<HTMLCanvasElement>(null);
