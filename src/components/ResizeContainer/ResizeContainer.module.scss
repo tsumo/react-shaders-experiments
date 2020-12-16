@@ -1,5 +1,4 @@
 .root {
-  resize: both;
   overflow: hidden;
   box-sizing: content-box;
   border: 2px solid transparent;
@@ -7,6 +6,7 @@
   transition: border-color 0.3s;
 
   &:hover {
+    resize: both;
     border-color: rgba(black, 0.3);
   }
 }
