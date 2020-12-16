@@ -3,7 +3,7 @@ import { useShaderService } from 'service/useShaderService';
 import { ResizeContainer } from 'components/ResizeContainer/ResizeContainer';
 import s from 'App.module.scss';
 
-const App = () => {
+export const App = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useShaderService(canvasRef);
 
@@ -15,5 +15,3 @@ const App = () => {
     </div>
   );
 };
-
-export default App;
