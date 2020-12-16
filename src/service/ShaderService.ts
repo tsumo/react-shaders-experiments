@@ -2,13 +2,11 @@ import { RefObject, useEffect, useMemo, useRef } from 'react';
 import { defaultFragmentShader, defaultVertexShader } from './defaultShaders';
 
 type ShaderServiceOptions = {
-  sizeRatio: number;
   vertexShaderSource: string;
   fragmentShaderSource: string;
 };
 
 const defaultOptions: ShaderServiceOptions = {
-  sizeRatio: 1,
   vertexShaderSource: defaultVertexShader,
   fragmentShaderSource: defaultFragmentShader,
 };
@@ -105,8 +103,8 @@ export class ShaderService {
 
   private resize() {
     const size = this.canvas.getBoundingClientRect();
-    this.canvas.width = size.width * this.options.sizeRatio;
-    this.canvas.height = size.height * this.options.sizeRatio;
+    this.canvas.width = size.width;
+    this.canvas.height = size.height;
   }
 
   destroy() {
